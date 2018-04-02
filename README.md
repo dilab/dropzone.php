@@ -7,9 +7,7 @@ To install, use composer:
 
 ``` composer require dilab/dropzone.php ```
 
-## How to use
-
-## More ##
+## Usage
 
 ## Testing
 ```
