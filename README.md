@@ -9,6 +9,9 @@ To install, use composer:
 
 ## Usage
 
++ Dropzone::build()->upload($stream,$meta)->name('test.jpg'');
+
+
 ## Testing
 ```
 $ ./vendor/bin/phpunit

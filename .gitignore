@@ -1,4 +1,6 @@
 vendor/*
 composer.lock
-tmp/*
-!tmp/empty
+test/tmp/*
+!test/tmp/empty
+test/upload/*
+!test/upload/empty
