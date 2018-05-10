@@ -4,10 +4,9 @@ namespace Dilab\Test;
 
 
 use Dilab\Dropzone;
-use League\Flysystem\Filesystem;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
 
-class DropzoneTest extends \PHPUnit_Framework_TestCase
+class DropzoneTest extends TestCase
 {
     /**
      * @var Dropzone
