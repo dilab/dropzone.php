@@ -30,6 +30,8 @@ class Dropzone
 
     private $uploadDir = 'upload';
 
+    private $root;
+
     /**
      * Dropzone constructor.
      * @param Filesystem $filesystem
@@ -38,68 +40,11 @@ class Dropzone
     {
         $this->name = time();
 
+        $this->root = $root;
+
         $adapter = new Local($root);
 
         $this->filesystem = new Filesystem($adapter);
-    }
-
-    public function name($name)
-    {
-        $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @param $meta
-     * @return boolean
-     */
-    private function isAlreadyUploaded($meta)
-    {
-        return $this->filesystem->has($this->tmpFilePath($meta));
-    }
-
-    private function uploadToTmp($stream, $meta)
-    {
-        try {
-
-            $this->filesystem->writeStream($this->tmpFilePath($meta), $stream);
-
-        } catch (FileExistsException $exception) {
-
-        }
-    }
-
-    /**
-     * @param $meta
-     * @return boolean
-     */
-    private function isUploadCompleted($meta)
-    {
-        return
-            count($this->filesystem->listContents($this->tmpDirPath($meta))) ==
-            $meta[$this->metaOption['dztotalchunkcount']];
-    }
-
-    private function assemble($meta)
-    {
-        foreach ($this->filesystem->listContents($this->tmpDirPath($meta), true) as $object) {
-
-            $stream = $this->filesystem->readStream($object['path']);
-
-            try {
-
-                $this->filesystem->writeStream($this->uploadFilePath($meta), $stream);
-
-            } catch (FileExistsException $exception) {
-
-            } finally {
-
-                fclose($stream);
-
-            }
-
-        }
-
     }
 
     public function upload($stream, $meta)
@@ -121,6 +66,72 @@ class Dropzone
         return $this;
     }
 
+    public function name($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @param $meta
+     * @return boolean
+     */
+    private function isAlreadyUploaded($meta)
+    {
+        return $this->filesystem->has($this->tmpFilePath($meta));
+    }
+
+    private function uploadToTmp($stream, $meta)
+    {
+        try {
+
+            $this->filesystem->writeStream($this->tmpFilePath($meta), $stream);
+
+        } catch (FileExistsException $exception) {
+
+            return;
+        }
+    }
+
+    /**
+     * @param $meta
+     * @return boolean
+     */
+    private function isUploadCompleted($meta)
+    {
+        return
+            count($this->filesystem->listContents($this->tmpDirPath($meta))) ==
+            intval($meta[$this->metaOption['dztotalchunkcount']]);
+    }
+
+    private function assemble($meta)
+    {
+        foreach ($this->filesystem->listContents($this->tmpDirPath($meta), true) as $object) {
+
+            $stream = $this->filesystem->readStream($object['path']);
+
+            try {
+
+                file_put_contents($this->root . self::DS . $this->uploadFilePath($meta), $stream,
+                    FILE_APPEND | LOCK_EX);
+
+            } catch (FileExistsException $exception) {
+
+                var_dump($exception->getMessage());
+
+                return;
+
+            } finally {
+
+                fclose($stream);
+
+            }
+
+        }
+
+    }
+
     private function removeTmpDir($meta)
     {
         $this->filesystem->deleteDir($this->tmpDirPath($meta));
@@ -140,10 +151,13 @@ class Dropzone
 
     private function uploadFilePath($meta)
     {
-        return $this->uploadDir . self::DS .
-            $meta[$this->metaOption['dzuuid']] . self::DS .
-            $this->name;
-    }
+        $uploadFolder = $this->uploadDir . self::DS . $meta[$this->metaOption['dzuuid']];
 
+        if (!$this->filesystem->has($uploadFolder)) {
+            $this->filesystem->createDir($uploadFolder);
+        };
+
+        return $uploadFolder . self::DS . $this->name;
+    }
 
 }
