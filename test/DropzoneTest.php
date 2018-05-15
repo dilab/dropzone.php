@@ -23,8 +23,8 @@ class DropzoneTest extends TestCase
     public function tearDown()
     {
         parent::tearDown();
-//        $this->rmdir(__DIR__ . '/upload');
-//        $this->rmdir(__DIR__ . '/tmp');
+        $this->rmdir(__DIR__ . '/upload');
+        $this->rmdir(__DIR__ . '/tmp');
     }
 
     function rmdir($dir)
@@ -107,7 +107,7 @@ class DropzoneTest extends TestCase
 
         $this->dropzone->upload($stream3, $metaC)->name('result.png');
 
-//        $this->dropzone->upload($stream1, $metaD)->name('result.png');
+        $this->dropzone->upload($stream1, $metaD)->name('result.png');
 
         // Assert
 
