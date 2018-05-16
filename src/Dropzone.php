@@ -106,7 +106,13 @@ class Dropzone
 
     private function assemble($meta)
     {
-        foreach ($this->filesystem->listContents($this->tmpDirPath($meta), true) as $object) {
+        $contents = $this->filesystem->listContents($this->tmpDirPath($meta), true);
+
+        uasort($contents, function ($a, $b) {
+            return $a['filename'] > $b['filename'];
+        });
+
+        foreach ($contents as $object) {
 
             $stream = $this->filesystem->readStream($object['path']);
 
