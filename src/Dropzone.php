@@ -69,7 +69,6 @@ class Dropzone
     public function name($name)
     {
         $this->name = $name;
-
         return $this;
     }
 

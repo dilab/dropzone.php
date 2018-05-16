@@ -46,9 +46,6 @@ class DropzoneTest extends TestCase
     public function testUpload()
     {
         // Arrange
-
-        $this->dropzone = new Dropzone(__DIR__);
-
         $mock1Path = __DIR__ . '/files/mock.png.0001';
 
         $mock2Path = __DIR__ . '/files/mock.png.0002';
@@ -101,13 +98,10 @@ class DropzoneTest extends TestCase
 
         // Act
 
-        $this->dropzone->upload($stream1, $metaA)->name('result.png');
-
-        $this->dropzone->upload($stream2, $metaB)->name('result.png');
-
-        $this->dropzone->upload($stream3, $metaC)->name('result.png');
-
-        $this->dropzone->upload($stream1, $metaD)->name('result.png');
+        (new Dropzone(__DIR__))->name('result.png')->upload($stream1, $metaA);
+        (new Dropzone(__DIR__))->name('result.png')->upload($stream2, $metaB);
+        (new Dropzone(__DIR__))->name('result.png')->upload($stream3, $metaC);
+        (new Dropzone(__DIR__))->name('result.png')->upload($stream1, $metaD);
 
         // Assert
 
