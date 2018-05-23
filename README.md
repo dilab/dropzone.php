@@ -7,7 +7,7 @@ To install, use composer:
 
 ``` composer require dilab/dropzone.php ```
 
-## Usage
+## API
 
 + Dropzone::build()->name('test.jpg'')->upload($stream,$meta);
 
@@ -16,4 +16,18 @@ To install, use composer:
 ## Testing
 ```
 $ ./vendor/bin/phpunit
+```
+
+## Sample
+
+```php
+include "vendor/autoload.php";
+
+use Dilab\Dropzone;
+
+$stream = fopen($_FILES['file']['tmp_name'], 'r+');
+
+$dropzone = new Dropzone(__DIR__);
+
+$dropzone->name($_FILES['file']['name'])->upload($stream, $_POST);
 ```
