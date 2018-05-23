@@ -18,6 +18,9 @@ To install, use composer:
 $ ./vendor/bin/phpunit
 ```
 
+## Features
++ [x] Support chunked upload
+
 ## Sample
 
 ```php
