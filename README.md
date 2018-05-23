@@ -9,8 +9,11 @@ To install, use composer:
 
 ## Usage
 
-+ Dropzone::build()->upload($stream,$meta)->name('test.jpg'');
++ Dropzone::build()->name('test.jpg'')->upload($stream,$meta);
 
+<aside class="notice">
+Make sure you call `name()` before `upload()` for it to work.
+</aside>
 
 ## Testing
 ```
