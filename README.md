@@ -11,9 +11,7 @@ To install, use composer:
 
 + Dropzone::build()->name('test.jpg'')->upload($stream,$meta);
 
-<aside class="notice">
-Make sure you call `name()` before `upload()` for it to work.
-</aside>
+> Make sure you call ``` name ``` before ``` upload ``` for it to work correctly.
 
 ## Testing
 ```
